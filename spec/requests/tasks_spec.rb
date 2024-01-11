@@ -131,4 +131,14 @@ RSpec.describe "/tasks", type: :request do
       expect(response).to redirect_to(tasks_url)
     end
   end
+
+  describe "Filtering tasks by completed status" do
+    it "renders a successful response" do
+      3.times { Task.create! valid_attributes }
+      get tasks_url, params: { completed: true }
+      expect(response).to be_successful
+      expect(assigns(:tasks).all?(&:completed)).to be(true)
+    end
+  end
+
 end
