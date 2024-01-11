@@ -4,6 +4,7 @@ class TasksController < ApplicationController
   # GET /tasks
   def index
     @tasks = Task.all
+    @tasks = @tasks.where(completed: params[:completed]) if params[:completed].present?
   end
 
   # GET /tasks/1

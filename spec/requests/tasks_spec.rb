@@ -18,7 +18,7 @@ RSpec.describe "/tasks", type: :request do
   # Task. As you add validations to Task, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { title: "New Task", completed: false }
+    { title: "New Task", completed: [true, false].sample }
   }
 
   let(:invalid_attributes) {
@@ -131,4 +131,15 @@ RSpec.describe "/tasks", type: :request do
       expect(response).to redirect_to(tasks_url)
     end
   end
+
+  describe "Filtering tasks by completed status" do
+    it "renders a successful response" do
+      3.times { Task.create! valid_attributes }
+      get tasks_url, params: { completed: true }
+      expect(response).to be_successful
+      expect(assigns(:tasks).all?(&:completed)).to be(true)
+    end
+  end
+
+
 end
